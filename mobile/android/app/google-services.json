@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "407305173791",
+    "firebase_url": "https://wateke-ee6bf.firebaseio.com",
+    "project_id": "wateke-ee6bf",
+    "storage_bucket": "wateke-ee6bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407305173791:android:90831168ef0d4b71",
+        "android_client_info": {
+          "package_name": "com.wateke"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407305173791-on0ikm3kd8vcenomiclh1vsn6s6qgf57.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wateke",
+            "certificate_hash": "acc76379c7a1ee0ee57d08a01257887c6839f452"
+          }
+        },
+        {
+          "client_id": "407305173791-p9c2sh66rokg3l8dkskqi28sake1jl6m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wateke",
+            "certificate_hash": "af47c0354fe00a057fd6c3992b84bf958dba08b8"
+          }
+        },
+        {
+          "client_id": "407305173791-jaiakbb36758lg84u8ncc8t8e0nl3qsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCamDwpIVSE8hJ0kF7cnGtUJiTNSAL2Nl0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407305173791-jaiakbb36758lg84u8ncc8t8e0nl3qsv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

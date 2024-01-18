@@ -1,0 +1,1 @@
+export type BlocChangeEvent<T> = {nextState: T; currentState: T};
