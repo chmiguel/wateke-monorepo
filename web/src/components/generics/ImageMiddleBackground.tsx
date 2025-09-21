@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 interface Props {
   src?: string;
+  children?: React.ReactNode;
 }
 
 const ImageMiddleBackground: React.FC<Props> = props => (
   <Container>
-    <BackgroundImage src={props.src}>
+    <BackgroundImage $src={props.src}>
       <Back />
     </BackgroundImage>
     <Content>{props.children}</Content>
@@ -21,11 +22,15 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const BackgroundImage = styled.div`
+interface BackgroundImageProps {
+  $src?: string;
+}
+
+const BackgroundImage = styled.div<BackgroundImageProps>`
   height: 100vh;
   z-index: 1;
   background-image: ${props =>
-    window.innerWidth > 500 ? `url(${props.src})` : 'none'};
+    window.innerWidth > 500 ? `url(${props.$src})` : 'none'};
   -webkit-filter: blur(8px);
   -moz-filter: blur(8px);
   -o-filter: blur(8px);

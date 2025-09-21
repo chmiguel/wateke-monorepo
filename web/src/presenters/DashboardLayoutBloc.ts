@@ -1,6 +1,6 @@
 import { Cubit } from 'bloc-react';
-import history from '../history';
 import SelectedSpotBloc from '../core/blocs/SelectedSpotBloc';
+import NavigationService from '../core/domain/navigation/NavigationService';
 
 export enum MenuTabs {
   Users = 0,
@@ -30,9 +30,11 @@ const initialState: DashboardLayoutState = {
 
 export default class DashboardLayoutBloc extends Cubit<DashboardLayoutState> {
   private selectedSpotBloc: SelectedSpotBloc;
-  constructor(selectedSpotBloc: SelectedSpotBloc) {
+  private navigationService: NavigationService;
+  constructor(selectedSpotBloc: SelectedSpotBloc, navigationService: NavigationService) {
     super(initialState);
     this.selectedSpotBloc = selectedSpotBloc;
+    this.navigationService = navigationService;
   }
 
   setCurrentMenuTab = (tab: MenuTabs) =>
@@ -44,7 +46,7 @@ export default class DashboardLayoutBloc extends Cubit<DashboardLayoutState> {
 
   leaveSpot = () => {
     this.selectedSpotBloc.closeSpot();
-    history.replace('/select-spot');
+    this.navigationService.navigate('/select-spot', { replace: true });
   };
 
   unmount = () => {

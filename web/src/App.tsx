@@ -1,14 +1,12 @@
 import React from 'react';
 import './index.css';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import Routes from './templates';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import AppRoutes from './templates';
 
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
+const theme = createTheme({
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       light: '#00fece',
       main: '#00fece',
@@ -27,8 +25,9 @@ const theme = createMuiTheme({
 });
 
 const App = () => (
-  <MuiThemeProvider theme={theme}>
-    <Routes />
-  </MuiThemeProvider>
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <AppRoutes />
+  </ThemeProvider>
 );
 export default App;

@@ -9,10 +9,10 @@ const CardOnBoarding = (props) => (
         <Card>
 
             <MockupPhoneResponsive src="/assets/images/mockup-phone.svg" alt="logo" />
-            <TitlesSmall maxWidth="70%" fontSizeResponisve="18px">
+            <TitlesSmall $maxWidth="70%" $fontSizeResponisve="18px">
                 {props.title}
             </TitlesSmall>
-            <Description maxWidth="70%" fontSizeResponisve="12px">
+            <Description $maxWidth="70%" $fontSizeResponisve="12px">
                 {props.description}
             </Description>
         </Card>
@@ -94,38 +94,38 @@ const Card = styled.div`
 `
 const TitlesSmall = styled.p`
     width: 100%;
-    max-width: ${props => props.maxWidth};
+    max-width: ${props => props.$maxWidth};
     font-family: Poppins;
-    font-size: ${props => props.fontSize || "28px"};
-    font-weight: ${props => props.fontWeight || "bold"};
+    font-size: ${props => props.$fontSize || "28px"};
+    font-weight: ${props => props.$fontWeight || "bold"};
     font-style: normal;
     font-stretch: normal;
     line-height: 1.5;
     letter-spacing: normal;
-    text-align: ${props => props.textAlign || "left"};
-    color: ${props => props.colorText || "#0d1419"};
+    text-align: ${props => props.$textAlign || "left"};
+    color: ${props => props.$colorText || "#0d1419"};
     @media (max-width: 768px){
         max-width: 95%;
         text-align: center;
-        font-size: ${props => props.fontSizeResponisve};
+        font-size: ${props => props.$fontSizeResponisve};
     }
 `
 const Description = styled.p`
     width: 100%;
-    max-width: ${props => props.maxWidth};
+    max-width: ${props => props.$maxWidth};
     font-family: Poppins;
-    font-size: ${props => props.fontSize || "16px"};
-    font-weight: ${props => props.fontWeight || "normal"};
+    font-size: ${props => props.$fontSize || "16px"};
+    font-weight: ${props => props.$fontWeight || "normal"};
     font-style: normal;
     font-stretch: normal;
     line-height: 1.5;
     letter-spacing: normal;
-    text-align: ${props => props.textAlign || "center"};
-    color: ${props => props.colorText || "#979ca8"};
+    text-align: ${props => props.$textAlign || "center"};
+    color: ${props => props.$colorText || "#979ca8"};
      @media (max-width: 768px){
         max-width: 95%;
-        font-size: ${props => props.fontSizeResponisve};
-        text-align: centerw
+        font-size: ${props => props.$fontSizeResponisve};
+        text-align: center;
     }
 `
 export default CardOnBoarding

@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useRef } from 'react';
-import { CircularProgress, withStyles } from '@material-ui/core';
-import Slider from '@material-ui/lab/Slider';
+import { CircularProgress } from '@mui/material';
+import { styled as muiStyled } from '@mui/material/styles';
+import Slider from '@mui/material/Slider';
 import styled from 'styled-components';
 import Button from '../generics/Button';
 import { useBloc } from '../../core/state';
@@ -8,7 +9,7 @@ import PlayerBloc from '../../presenters/SpotifyPlayerBloc';
 import withBloc from '../../core/withBlocHOC';
 import BlocsFactory from '../../BlocsFactory';
 import { PlayerProps } from '../../core/domain/music/PlayerProps';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { accentColor } from '../../constants';
 import { MdSearch, MdPlayArrow, MdPause } from 'react-icons/md';
 
@@ -36,22 +37,22 @@ export const getSpotifyPlayerBounds = () => {
   return { width, height, format };
 };
 
-const StyledSlider = withStyles({
-  track: {
+const StyledSlider = muiStyled(Slider)(({ theme }) => ({
+  '& .MuiSlider-track': {
     height: 4,
   },
-  trackAfter: {
+  '& .MuiSlider-rail': {
     backgroundColor: 'grey',
     opacity: 1,
   },
-})(Slider);
+}));
 
 const { width, height } = getSpotifyPlayerBounds();
 
 const SpotifyPlayer: React.FC<PlayerProps> = props => {
   const { songId, song } = props;
   const [state, bloc] = useBloc(PlayerBloc);
-  const history = useHistory();
+  const navigate = useNavigate();
   const isFirstTime = useRef(true);
   const location = useLocation();
   const refreshIntervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -83,7 +84,7 @@ const SpotifyPlayer: React.FC<PlayerProps> = props => {
           params.get('refresh_token') as string,
         );
         bloc.emit({ ...bloc.state, accessToken });
-        history.replace('/dashboard');
+        navigate('/dashboard', { replace: true });
       }
     }
   }, [location.search]);
@@ -123,7 +124,7 @@ const SpotifyPlayer: React.FC<PlayerProps> = props => {
       {state.accessToken && songId && (
         <>
           <PlayerContainer
-            hasPlayerLoaded={state.hasPlayerLoaded}
+            $hasPlayerLoaded={state.hasPlayerLoaded}
             style={{
               width: width,
               height: height,
@@ -149,7 +150,7 @@ const SpotifyPlayer: React.FC<PlayerProps> = props => {
           </PlayerContainer>
           <StyledSlider
             value={state.currentTrackProgressPercentage}
-            onChange={(e, value) => bloc.updateProgress(value)}
+            onChange={(e, value) => bloc.updateProgress(Array.isArray(value) ? value[0] : value)}
             onDragEnd={() => bloc.seekToProgress()}
             style={{
               width: width,
@@ -168,7 +169,7 @@ const SpotifyPlayer: React.FC<PlayerProps> = props => {
         </>
       )}
       {state.accessToken && !songId && (
-        <FakePlayer width={width} height={height}>
+        <FakePlayer $width={width} $height={height}>
           <Title>
             Ya tienes todo listo, agrega tu primera canción a tu playlist a
             traves de la barra de búsqueda
@@ -178,7 +179,7 @@ const SpotifyPlayer: React.FC<PlayerProps> = props => {
       )}
 
       {!state.accessToken ? (
-        <FakePlayer width={width} height={height}>
+        <FakePlayer $width={width} $height={height}>
           <Title>Para reproducir debes iniciar sesión con Spotify</Title>
           {state.isLoggingIn ? (
             <CircularProgress size={25} color="primary" />
@@ -195,8 +196,12 @@ const SpotifyPlayer: React.FC<PlayerProps> = props => {
   );
 };
 
-const PlayerContainer = styled.div`
-  display: ${props => (props.hasPlayerLoaded ? 'flex' : 'none')};
+interface PlayerContainerProps {
+  $hasPlayerLoaded: boolean;
+}
+
+const PlayerContainer = styled.div<PlayerContainerProps>`
+  display: ${props => (props.$hasPlayerLoaded ? 'flex' : 'none')};
   flex-direction: column-reverse;
   background-size: cover;
   background-repeat: no-repeat;
@@ -204,17 +209,22 @@ const PlayerContainer = styled.div`
   align-self: center;
   iframe:last-child {
     height: 100%;
-    display: ${props => (props.hasPlayerLoaded ? 'block' : 'none')}!important;
+    display: ${props => (props.$hasPlayerLoaded ? 'block' : 'none')}!important;
   }
   iframe {
     display: none !important;
   }
 `;
 
-const FakePlayer = styled.div`
+interface FakePlayerProps {
+  $width: number;
+  $height: number;
+}
+
+const FakePlayer = styled.div<FakePlayerProps>`
   background-color: #00000060;
-  width: ${props => props.width - 40}px;
-  height: ${props => props.height - 40}px;
+  width: ${props => props.$width - 40}px;
+  height: ${props => props.$height - 40}px;
   display: flex;
   flex-direction: column;
   justify-content: center;

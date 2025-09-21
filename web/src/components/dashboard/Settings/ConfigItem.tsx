@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { Switch, Select, MenuItem } from '@material-ui/core';
+import { Switch, Select, MenuItem } from '@mui/material';
 import { UserConfig, UserConfigValue } from '../../../core/domain/spots/Spot';
 
 interface Props {
@@ -17,18 +17,20 @@ const ConfigItem: React.FC<Props> = ({
   const { title, subtitle, type, options } = config;
 
   const onChangeConfig = useCallback(
-    ({
-      target: { value },
-    }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    (event: any) => {
       if (!onChangeValue) return;
-      if (type === 'switch')
+      if (type === 'switch') {
         onChangeValue(
           typeof currentValue === 'boolean' ? !currentValue : false,
           config,
         );
-      else onChangeValue(value, config);
+      } else {
+        // For Select components, use event.target.value
+        const value = event.target.value;
+        onChangeValue(value as UserConfigValue, config);
+      }
     },
-    [type, currentValue],
+    [type, currentValue, config, onChangeValue],
   );
 
   return (
@@ -40,7 +42,7 @@ const ConfigItem: React.FC<Props> = ({
             <ConfigDesc className="grey-text">{subtitle}</ConfigDesc>
           </div>
           <Switch
-            checked={currentValue ? 'checked' : ''}
+            checked={Boolean(currentValue)}
             value="checked"
             onChange={onChangeConfig}
           />

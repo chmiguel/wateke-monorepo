@@ -3,7 +3,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
 } from 'react-places-autocomplete';
 import styled from 'styled-components'
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 const Error = styled.span`
     color: #ea4335;

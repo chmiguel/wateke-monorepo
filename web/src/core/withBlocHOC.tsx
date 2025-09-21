@@ -9,7 +9,7 @@ function withBloc<P, T extends Cubit<any>>(
   return function WithBlocComponent(props: P) {
     return (
       <BlocProvider<T> bloc={bloc}>
-        <WrappedComponent {...props} />
+        <WrappedComponent {...(props as any)} />
       </BlocProvider>
     );
   };

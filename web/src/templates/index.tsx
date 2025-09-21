@@ -1,5 +1,5 @@
-import React, { ComponentType, Suspense } from 'react';
-import { Router, Route, Redirect, RouteProps } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 const SpotsList = React.lazy(() => import('./SpotsList'));
 const Dashboard = React.lazy(() => import('./Dashboard'));
@@ -12,7 +12,8 @@ const LandingPage = React.lazy(() => import('./LandingPage'));
 import { useBloc } from '../core/state';
 import UserBloc from '../core/blocs/UserBloc';
 import SelectedSpotBloc from '../core/blocs/SelectedSpotBloc';
-import history from '../history';
+import { useNavigationService } from '../hooks/useNavigationService';
+// import history from '../history'; // Not needed in React Router v6
 
 const Loading = (
   <div className="total-center loading-container">
@@ -24,115 +25,149 @@ const Loading = (
   </div>
 );
 
-const Routes: React.FC = () => {
+// Component to initialize navigation service inside router context
+const NavigationServiceProvider: React.FC = () => {
+  useNavigationService();
+  return null;
+};
+
+// Private Route wrapper for authenticated users
+interface PrivateRouteProps {
+  children: React.ReactElement;
+  requiresSpotSelection?: boolean;
+  isAuthenticated: boolean;
+  hasSpotSelected: boolean;
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ 
+  children, 
+  requiresSpotSelection = true,
+  isAuthenticated,
+  hasSpotSelected
+}) => {
+  // If not authenticated, redirect to login
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If authenticated but no spot selected and spot is required
+  if (requiresSpotSelection && !hasSpotSelected) {
+    return <Navigate to="/select-spot" replace />;
+  }
+
+  // If authenticated and spot selected (or spot not required), render the component
+  return children;
+};
+
+// Unlogged Route wrapper for public pages
+interface UnloggedRouteProps {
+  children: React.ReactElement;
+  isAuthenticated: boolean;
+  hasSpotSelected: boolean;
+}
+
+const UnloggedRoute: React.FC<UnloggedRouteProps> = ({ 
+  children, 
+  isAuthenticated, 
+  hasSpotSelected 
+}) => {
+  // If authenticated and has spot selected, redirect to dashboard
+  if (isAuthenticated && hasSpotSelected) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // If authenticated but no spot selected, redirect to spot selection
+  if (isAuthenticated && !hasSpotSelected) {
+    return <Navigate to="/select-spot" replace />;
+  }
+
+  // If not authenticated, render the public component
+  return children;
+};
+
+const AppRoutes: React.FC = () => {
   const [userState] = useBloc(UserBloc);
   const [selectedSpotState] = useBloc(SelectedSpotBloc);
 
   if (!userState.isInitialized) {
     return null;
   }
+
+  const isAuthenticated = !!userState.uid;
+  const hasSpotSelected = !!selectedSpotState.spot;
   
   return (
     <Suspense fallback={Loading}>
-      <Router history={history}>
-        <div>
-          <UnloggedRoute
-            hasSpotSelected={!!selectedSpotState.spot}
-            isAuthenticated={!!userState.uid}
-            exact
-            path="/login"
-            component={Login}
+      <BrowserRouter>
+        <NavigationServiceProvider />
+        <Routes>
+          {/* Public routes - redirect authenticated users appropriately */}
+          <Route 
+            path="/login" 
+            element={
+              <UnloggedRoute isAuthenticated={isAuthenticated} hasSpotSelected={hasSpotSelected}>
+                <Login />
+              </UnloggedRoute>
+            } 
           />
-          <UnloggedRoute
-            hasSpotSelected={!!selectedSpotState.spot}
-            isAuthenticated={!!userState.uid}
-            exact
-            path="/"
-            component={Login}
+          <Route 
+            path="/" 
+            element={
+              <UnloggedRoute isAuthenticated={isAuthenticated} hasSpotSelected={hasSpotSelected}>
+                <Login />
+              </UnloggedRoute>
+            } 
           />
-          <UnloggedRoute
-            hasSpotSelected={!!selectedSpotState.spot}
-            isAuthenticated={!!userState.uid}
-            exact
-            path="/landing"
-            component={LandingPage}
+          <Route 
+            path="/landing" 
+            element={
+              <UnloggedRoute isAuthenticated={isAuthenticated} hasSpotSelected={hasSpotSelected}>
+                <LandingPage />
+              </UnloggedRoute>
+            } 
           />
-          <Route exact path="/spots/:spotId" component={Spots} />
-          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-          <PrivateRoute
-            hasSpotSelected={!!selectedSpotState.spot}
-            isAuthenticated={!!userState.uid}
-            exact
-            path="/dashboard"
-            component={Dashboard}
+          
+          {/* Public routes without authentication redirects */}
+          <Route path="/spots/:spotId" element={<Spots />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          
+          {/* Private routes - require authentication and spot selection */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated} hasSpotSelected={hasSpotSelected}>
+                <Dashboard />
+              </PrivateRoute>
+            } 
           />
-
-          <PrivateRoute
-            hasSpotSelected={!!selectedSpotState.spot}
-            isAuthenticated={!!userState.uid}
-            exact
-            path="/select-spot"
-            component={SpotsList}
+          
+          {/* Private route that doesn't require spot selection */}
+          <Route 
+            path="/select-spot" 
+            element={
+              <PrivateRoute 
+                requiresSpotSelection={false} 
+                isAuthenticated={isAuthenticated} 
+                hasSpotSelected={hasSpotSelected}
+              >
+                <SpotsList />
+              </PrivateRoute>
+            } 
           />
-          <PrivateRoute
-            hasSpotSelected
-            isAuthenticated={!!userState.uid}
-            exact
-            path="/my-spots"
-            component={MySpots}
+          
+          {/* Private route that requires spot selection */}
+          <Route 
+            path="/my-spots" 
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated} hasSpotSelected={hasSpotSelected}>
+                <MySpots />
+              </PrivateRoute>
+            } 
           />
-        </div>
-      </Router>
+        </Routes>
+      </BrowserRouter>
     </Suspense>
   );
 };
 
-export default Routes;
-
-const PrivateRoute: React.FC<
-  {
-    component: React.FC | ComponentType;
-    isAuthenticated: boolean;
-    hasSpotSelected: boolean;
-  } & RouteProps
-> = ({ component: Component, isAuthenticated, hasSpotSelected, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => {
-      if (isAuthenticated) {
-        if (hasSpotSelected) {
-          return <Component {...props} />;
-        }
-        if (rest.path !== '/select-spot') {
-          return <Redirect exact to="/select-spot" />;
-        }
-        return <Component {...props} />;
-      }
-      return <Redirect exact to="/login" />;
-    }}
-  />
-);
-
-const UnloggedRoute: React.FC<
-  {
-    component: React.FC | ComponentType;
-    isAuthenticated: boolean;
-    hasSpotSelected: boolean;
-  } & RouteProps
-> = ({ component: Component, isAuthenticated, hasSpotSelected, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => {
-      if (isAuthenticated) {
-        if (hasSpotSelected && rest.path !== '/dashboard') {
-          return <Redirect to="/dashboard" {...props} />;
-        }
-        if (rest.path !== '/select-spot') {
-          return <Redirect exact to="/select-spot" />;
-        }
-        return <Component {...props} />;
-      }
-      return <Component {...props} />;
-    }}
-  />
-);
+export default AppRoutes;

@@ -23,6 +23,8 @@ import { MusicProvider } from './core/domain/music/Music';
 import SpotifySongsService from './infrastructure/music/SpotifySongsService';
 import PlayerService from './core/domain/music/PlayerService';
 import SpotifyPlayerService from './infrastructure/music/SpotifyPlayerService';
+import NavigationService from './core/domain/navigation/NavigationService';
+import WebNavigationService from './infrastructure/navigation/WebNavigationService';
 
 export const updateServiceForProvider = (provider: MusicProvider) => {
   switch (provider) {
@@ -74,6 +76,7 @@ export class Provider {
   static connectivityRepository = () =>
     new ConnectivityRepository(D.connectivityService());
   static toastRepository = () => new ToastRepository(D.toastService());
+  static navigationService = () => D.navigationService();
 }
 
 const _singleInstances: { [key: string]: any } = {};
@@ -110,6 +113,8 @@ class Dependencies {
 
   static toastService = () =>
     singleton('toastService', () => new WebToastService());
+  static navigationService = () =>
+    singleton('navigationService', () => new WebNavigationService());
 }
 
 const D = Dependencies;

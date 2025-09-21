@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { MdKeyboardArrowDown, MdSchedule } from 'react-icons/md';
 import moment from 'moment';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { ChatMessage } from '../../core/domain/chat/Chat';
 import randomMC from 'random-material-color';
 
@@ -43,11 +43,11 @@ const MessageItem: React.FC<Props> = props => {
       : null;
 
   return (
-    <MessageAlign isFromUser={isFromUser} type={type}>
-      <Container id={id} type={type}>
+    <MessageAlign $isFromUser={isFromUser} $type={type}>
+      <Container id={id} $type={type}>
         {type !== 'song' ? (
           <div className="row-cont">
-            <MessageSender color={userColor}>{senderName}</MessageSender>
+            <MessageSender $color={userColor!}>{senderName}</MessageSender>
             <MdKeyboardArrowDown
               aria-owns={menuOpened ? 'simple-menu-message' : undefined}
               aria-haspopup="true"
@@ -78,7 +78,7 @@ const MessageItem: React.FC<Props> = props => {
           repliedMessage.type === undefined) ? (
           <Reply onClick={onRepliedMessagePressed}>
             <div className="row-cont">
-              <AnswerBar color={publisherColor} />
+              <AnswerBar $color={publisherColor} />
               <div>
                 <div className="row-cont">
                   <img
@@ -104,7 +104,7 @@ const MessageItem: React.FC<Props> = props => {
         repliedMessage.type === 'text' ? (
           <Reply onClick={onRepliedMessagePressed}>
             <div className="row-cont">
-              <AnswerBar color={publisherColor} />
+              <AnswerBar $color={publisherColor} />
               <div>
                 <div style={{ marginBottom: 5 }} className="row-cont">
                   <div>
@@ -132,7 +132,7 @@ const MessageItem: React.FC<Props> = props => {
             <div className="row-cont">
               <img src={songThumbnail} alt="song cover" />
               <div>
-                <MessageSender color={userColor}>
+                <MessageSender $color={userColor!}>
                   {senderName}{' '}
                   <span style={{ fontWeight: 400, color: '#fff' }}>
                     ha postulado
@@ -172,11 +172,11 @@ const MessageItem: React.FC<Props> = props => {
               <MessageText
                 className="con-html"
                 dangerouslySetInnerHTML={{
-                  __html: message,
+                  __html: message || '',
                 }}
               />
             ) : (
-              <MessageText>{message}</MessageText>
+              <MessageText>{message || ''}</MessageText>
             )}
             <MessageDate>
               {pending || !createdAt ? (
@@ -192,12 +192,17 @@ const MessageItem: React.FC<Props> = props => {
   );
 };
 
-const MessageAlign = styled.div`
+interface MessageAlignProps {
+  $isFromUser: boolean;
+  $type: 'text' | 'song' | 'reply';
+}
+
+const MessageAlign = styled.div<MessageAlignProps>`
   display: flex;
-  justify-content: ${props => (props.isFromUser ? 'flex-end' : 'flex-start')};
+  justify-content: ${props => (props.$isFromUser ? 'flex-end' : 'flex-start')};
   margin: 10px;
-  margin-left: ${props => (props.isFromUser ? '40px' : '10px')};
-  margin-right: ${props => (!props.isFromUser ? '40px' : '10px')};
+  margin-left: ${props => (props.$isFromUser ? '40px' : '10px')};
+  margin-right: ${props => (!props.$isFromUser ? '40px' : '10px')};
 `;
 
 const Reply = styled.div`
@@ -255,23 +260,28 @@ const Song = styled.div`
   }
 `;
 
-const AnswerBar = styled.div`
+const AnswerBar = styled.div<{ $color?: string }>`
   height: 54px;
   flex: 1;
   width: 3px;
   min-width: 3px;
   max-width: 3px;
-  background-color: ${props => props.color || '#fff'};
+  background-color: ${props => props.$color || '#fff'};
   margin-right: 5px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 `;
 
-const Container = styled.div`
+interface ContainerProps {
+  id?: string;
+  $type: 'text' | 'song' | 'reply';
+}
+
+const Container = styled.div<ContainerProps>`
   position: relative;
   padding: 5px 10px 5px 10px;
   background-color: ${props =>
-    props.type === 'song' ? 'transparent' : '#202020'};
+    props.$type === 'song' ? 'transparent' : '#202020'};
 
   color: #fff;
   border-radius: 8px;
@@ -279,12 +289,12 @@ const Container = styled.div`
   transition-property: 'background-color';
 `;
 
-const MessageSender = styled.p`
+const MessageSender = styled.p<{ $color: string }>`
   font-weight: bold;
   font-size: 12px;
   margin-bottom: 3px;
   margin-right: 12px;
-  color: ${props => props.color};
+  color: ${props => props.$color};
 `;
 
 const MessageText = styled.p`

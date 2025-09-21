@@ -8,7 +8,7 @@ import BlocsFactory from '../BlocsFactory';
 import withBloc from '../core/withBlocHOC';
 import SpotsListBloc from '../presenters/SpotsListBloc';
 import { selectedSpotBloc, useBloc } from '../core/state';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 
 const SpotsList: React.FC = () => {
   const [state, bloc] = useBloc(SpotsListBloc);
@@ -120,7 +120,11 @@ const GreenText = styled.div`
   margin-bottom: 10px;
   margin-left: 10px;
 `;
-const Container = styled.div`
+interface ContainerProps {
+  url?: string;
+}
+
+const Container = styled.div<ContainerProps>`
   padding: 20px;
   display: flex;
   flex-direction: column;

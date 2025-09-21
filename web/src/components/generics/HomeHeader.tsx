@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { MdMoreVert } from 'react-icons/md';
-import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [anchorElement, setAnchorElement] = useState<SVGElement | null>(null);
 
   const goToAnchor = (id: string) => {
@@ -15,8 +15,8 @@ const Header: React.FC = () => {
       const elmnt = document.getElementById(id);
       elmnt?.scrollIntoView({ behavior: 'smooth' });
     } else {
-      history.push('/landing', {
-        anchorId: id,
+      navigate('/landing', {
+        state: { anchorId: id },
       });
     }
   };

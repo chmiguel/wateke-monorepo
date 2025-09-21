@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import ButtonBase from '@mui/material/ButtonBase';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -19,6 +19,7 @@ const Container = styled.div`
 interface Props {
   style?: any;
   onClick?: ()=>void;
+  children?: React.ReactNode;
 }
 
 const Button: React.FC<Props> = ({ children, style, onClick}) => {

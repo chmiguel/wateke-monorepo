@@ -1,9 +1,9 @@
 import { Cubit } from 'bloc-react';
-import history from '../history';
 import SelectedSpotBloc from '../core/blocs/SelectedSpotBloc';
 import UserRepository from '../core/domain/auth/UserRepository';
 import { Spot } from '../core/domain/spots/Spot';
 import SpotsRepository from '../core/domain/spots/SpotsRepository';
+import NavigationService from '../core/domain/navigation/NavigationService';
 
 interface SpotsListState {
   userSpots: Spot[];
@@ -17,12 +17,14 @@ export default class SpotsListBloc extends Cubit<SpotsListState> {
   private userRepository: UserRepository;
   private spotsRepository: SpotsRepository;
   private selectedSpotBloc: SelectedSpotBloc;
+  private navigationService: NavigationService;
   searchText = '';
 
   constructor(
     userRepository: UserRepository,
     spotsRepository: SpotsRepository,
     selectedSpotBloc: SelectedSpotBloc,
+    navigationService: NavigationService,
   ) {
     super({
       userSpots: [],
@@ -35,6 +37,7 @@ export default class SpotsListBloc extends Cubit<SpotsListState> {
     this.userRepository = userRepository;
     this.spotsRepository = spotsRepository;
     this.selectedSpotBloc = selectedSpotBloc;
+    this.navigationService = navigationService;
   }
 
   start = async () => {
@@ -48,7 +51,7 @@ export default class SpotsListBloc extends Cubit<SpotsListState> {
 
   selectSpot = (spot: Spot) => {
     this.selectedSpotBloc.selectSpot(spot);
-    history.replace('/dashboard');
+    this.navigationService.navigate('/dashboard', { replace: true });
   };
 
   handleSearchTextChanged = (searchText: string) => {

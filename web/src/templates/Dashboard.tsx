@@ -2,10 +2,10 @@ import React, { Fragment, ReactElement, useCallback, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { MdSearch, MdArrowBack } from 'react-icons/md';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { getPlayerBounds, filterSongs } from '../lib/utilities';
 import Footer from '../components/generics/Footer';
 import ImageMiddleBackground from '../components/generics/ImageMiddleBackground';
@@ -24,7 +24,7 @@ import UserBloc from '../core/blocs/UserBloc';
 import DashboardLayout from '../components/layouts/DashboardLayout';
 import { BlocChangeEvent } from '../core/blocPattern';
 import Player from '../components/dashboard/Player';
-import FlipMove from 'react-flip-move';
+// import FlipMove from 'react-flip-move'; // Temporarily disabled for React 18 compatibility
 
 const getTabsStyle = (isActive: boolean) => ({
   label: isActive ? 'color-primary' : 'color-white',
@@ -85,7 +85,7 @@ const Dashboard: React.FC = (): ReactElement => {
                   )}
                 />
               )}
-              <VideoContainer playerWidth={playerWidth}>
+              <VideoContainer $playerWidth={playerWidth}>
                 <BlocBuilder
                   blocClass={SelectedSpotBloc}
                   shouldUpdate={shouldUpdatePlayerComponent}
@@ -170,7 +170,7 @@ const Dashboard: React.FC = (): ReactElement => {
                   </InputContainer>
                 </SearchContainer>
                 <PostAndSuggestions
-                  isSearchViewActive={state.isSearchViewActive}
+                  $isSearchViewActive={state.isSearchViewActive}
                 >
                   {state.isSearchViewActive ? (
                     <Fragment>
@@ -251,7 +251,7 @@ const Dashboard: React.FC = (): ReactElement => {
                                   <CircularProgress />
                                 </div>
                               ) : null}
-                              <FlipMove>
+                              <div>
                                 {!selectedSpotState.isLoadingPlaylist ? (
                                   selectedSpotState.currentPlaylist.map(
                                     (item, i) => {
@@ -306,7 +306,7 @@ const Dashboard: React.FC = (): ReactElement => {
                                     </p>
                                   </NoResultsContainer>
                                 )}
-                              </FlipMove>
+                              </div>
                             </PostedContainer>
                           )}
                         />
@@ -419,8 +419,12 @@ const ContentContainer = styled.div`
     margin-top: 00px;
   }
 `;
-const VideoContainer = styled.div`
-  width: ${props => props.playerWidth}px;
+interface VideoContainerProps {
+  $playerWidth: number;
+}
+
+const VideoContainer = styled.div<VideoContainerProps>`
+  width: ${props => props.$playerWidth}px;
   margin-left: 20px;
   @media (max-width: 992px) {
     margin-left: 0px;
@@ -489,7 +493,11 @@ const InputContainer = styled.div`
     width: 85%;
   }
 `;
-const PostAndSuggestions = styled.div`
+interface PostAndSuggestionsProps {
+  $isSearchViewActive?: boolean;
+}
+
+const PostAndSuggestions = styled.div<PostAndSuggestionsProps>`
   position: relative;
   width: 100%;
   max-width: 500px;
@@ -501,7 +509,7 @@ const PostAndSuggestions = styled.div`
   }
   @media (max-width: 450px) {
     width: 100%;
-    margin-top: ${props => (props.isSearchViewActive ? '0px' : '-48px')};
+    margin-top: ${props => (props.$isSearchViewActive ? '0px' : '-48px')};
   }
 `;
 const IconContainer = styled.div`

@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
-import Switch from '@material-ui/core/Switch';
+import Switch from '@mui/material/Switch';
 import { SpotUserVM } from '../../core/domain/auth/User';
 
 interface Props {
@@ -24,7 +24,7 @@ const SpotUser: React.FC<Props> = ({
       <UserActionContainer>
         {isAdmin ? (
           <Switch
-            checked={user.isBlocked ? 'checked' : ''}
+            checked={Boolean(user.isBlocked)}
             value="checked"
             onChange={() => {
               toggleBlockedStatus(user);
@@ -70,7 +70,11 @@ const Name = styled.div`
   margin-left: 10px;
 `;
 
-const Avatar = styled.div`
+interface AvatarProps {
+  src: string | null;
+}
+
+const Avatar = styled.div<AvatarProps>`
   width: 30px !important;
   max-width: 30px;
   height: 30px;

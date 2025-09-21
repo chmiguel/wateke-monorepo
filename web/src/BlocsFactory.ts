@@ -14,6 +14,7 @@ const songsRepository = Provider.songsRepository();
 const spotsRepository = Provider.spotsRepository();
 const playlistRepository = Provider.playlistRepository();
 const toastRepository = Provider.toastRepository();
+const navigationService = Provider.navigationService();
 
 class BlocsFactory {
   static dashboardBloc = (): DashboardBloc =>
@@ -24,11 +25,11 @@ class BlocsFactory {
       spotsRepository,
     );
   static spotsListBloc = (selectedSpotBloc: SelectedSpotBloc): SpotsListBloc =>
-    new SpotsListBloc(userRepository, spotsRepository, selectedSpotBloc);
+    new SpotsListBloc(userRepository, spotsRepository, selectedSpotBloc, navigationService);
   static spotInviteBloc = (
     userBloc: UserBloc,
     selectedSpotBloc: SelectedSpotBloc,
-  ) => new SpotInviteBloc(userBloc, selectedSpotBloc, spotsRepository);
+  ) => new SpotInviteBloc(userBloc, selectedSpotBloc, spotsRepository, navigationService);
 
   static spotsBloc = (): SelectedSpotBloc =>
     new SelectedSpotBloc(
@@ -48,7 +49,7 @@ class BlocsFactory {
   static settingsBloc = (): SettingsBloc =>
     new SettingsBloc(spotsRepository, playlistRepository);
   static mySpotsBloc = (selectedSpotBloc: SelectedSpotBloc): MySpotsBloc =>
-    new MySpotsBloc(spotsRepository, selectedSpotBloc);
+    new MySpotsBloc(spotsRepository, selectedSpotBloc, navigationService);
 }
 
 export { BlocsFactory };

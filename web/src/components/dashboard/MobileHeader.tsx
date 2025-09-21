@@ -38,7 +38,11 @@ const MobileHeader: React.FC<Props> = props => {
   );
 };
 
-const Container = styled.div`
+interface ContainerProps {
+  image?: string;
+}
+
+const Container = styled.div<ContainerProps>`
   display: none;
   height: 200px;
   background-image: ${props =>

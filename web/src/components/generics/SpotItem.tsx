@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { CSSProperties } from 'styled-components';
+import styled from 'styled-components';
 import { MdPlayCircleFilled, MdDelete } from 'react-icons/md';
 import { Spot } from '../../core/domain/spots/Spot';
 
@@ -8,8 +8,8 @@ interface Props {
   onSpotPressed: (item: Spot) => void;
   onDeletePressed?: (item: Spot) => void;
   shouldShowAdminOptions?: boolean;
-  style?: CSSProperties;
-  nameStyle?: CSSProperties;
+  style?: React.CSSProperties;
+  nameStyle?: React.CSSProperties;
 }
 
 const SpotItem: React.FC<Props> = props => {
@@ -29,7 +29,7 @@ const SpotItem: React.FC<Props> = props => {
 
   return (
     <ItemContainer onClick={handleSelectSpot} style={style}>
-      <ImageContainer url={coverPicture}>
+      <ImageContainer $url={coverPicture}>
         <OpacityContainer>
           {isOnline ? (
             <StatusContainer>
@@ -75,11 +75,15 @@ const ItemContainer = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+interface ImageContainerProps {
+  $url: string;
+}
+
+const ImageContainer = styled.div<ImageContainerProps>`
   min-width: 100%;
   height: 100%;
   background-color: #0d1419a0;
-  background-image: ${props => `url(${props.url})`};
+  background-image: ${props => `url(${props.$url})`};
   background-size: cover;
   background-position: center;
 `;

@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 
 
 const Button = styled.button`
-    background-color: ${props => props.disabled ? '#353a50': '#00fece'};
-    border-color: ${props => props.disabled ? '#353a50': '#00fece'};
+    background-color: ${props => props.$disabled ? '#353a50': '#00fece'};
+    border-color: ${props => props.$disabled ? '#353a50': '#00fece'};
     color: #000;
     cursor: pointer;
     border-radius: 3px;
@@ -17,7 +17,7 @@ const Button = styled.button`
     border: 1px solid transparent;
     height: 35px;
     :hover{
-        background-color:  ${props => props.disabled ? '#353a50': '#02c7a2'};
+        background-color:  ${props => props.$disabled ? '#353a50': '#02c7a2'};
     }
     outline: none;
 `
@@ -26,7 +26,7 @@ const Button = styled.button`
 const ButtonContainer = (props) => {
     return(
         <div>
-        <Button onClick={() => props.onClick()} style={props.style} disabled={props.disabled}>{props.label}</Button>
+        <Button onClick={() => props.onClick()} style={props.style} $disabled={props.disabled}>{props.label}</Button>
         </div>
     )
 }

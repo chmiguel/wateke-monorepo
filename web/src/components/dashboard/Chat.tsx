@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import { MdClear, MdInsertEmoticon } from 'react-icons/md';
-import { ClickAwayListener } from '@material-ui/core';
+import { ClickAwayListener } from '@mui/material';
 import { backgroundColor, accentColor } from '../../constants';
 import MessageItem from './MessageItem';
 import { ReplyPayload } from '../../core/domain/chat/Chat';

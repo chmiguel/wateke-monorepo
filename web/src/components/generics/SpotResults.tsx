@@ -15,7 +15,7 @@ const SpotResults: React.FC<Props> = props => {
         return (
           <ItemContainer
             key={key}
-            src={spot.coverPicture}
+            $src={spot.coverPicture}
             onClick={() => props.onPressSpot(spot)}
           >
             <Opacity>
@@ -58,10 +58,14 @@ const SpotsGrid = styled.div`
   }
 `;
 
-const ItemContainer = styled.div`
+interface ItemContainerProps {
+  $src: string;
+}
+
+const ItemContainer = styled.div<ItemContainerProps>`
   width: 300px;
   height: 230px;
-  background-image: ${props => `url(${props.src})`};
+  background-image: ${props => `url(${props.$src})`};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

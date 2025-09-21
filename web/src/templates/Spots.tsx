@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import AbsoluteLoader from '../components/generics/AbsoluteLoader';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { selectedSpotBloc, useBloc, userBloc } from '../core/state';
 import SpotInviteBloc from '../presenters/SpotInviteBloc';
 import withBloc from '../core/withBlocHOC';
@@ -81,11 +81,11 @@ const Divider = styled.div`
 `;
 
 const Spots: React.FC = () => {
-  const match = useRouteMatch<{ spotId?: string }>();
+  const { spotId } = useParams<{ spotId?: string }>();
   const [state, bloc] = useBloc(SpotInviteBloc);
 
   useEffect(() => {
-    if (match?.params?.spotId) bloc.start(match?.params?.spotId);
+    if (spotId) bloc.start(spotId);
   }, []);
 
   return (

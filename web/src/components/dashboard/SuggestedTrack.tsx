@@ -1,6 +1,6 @@
 import React from 'react';
 import { MdAddCircle, MdCheckCircle } from 'react-icons/md';
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import styled from 'styled-components';
 import { accentColor } from '../../constants';
 import { SongVM } from '../../core/domain/music/Music';

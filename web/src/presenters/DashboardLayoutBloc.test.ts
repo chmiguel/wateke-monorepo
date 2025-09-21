@@ -59,7 +59,8 @@ describe('DashboardLayoutBloc should', () => {
   });
 
   function createPresenter(): DashboardLayoutBloc {
-    return new DashboardLayoutBloc(instance(selectedSpotBloc));
+    const mockNavigationService = {} as any; // Mock navigation service for tests
+    return new DashboardLayoutBloc(instance(selectedSpotBloc), mockNavigationService);
   }
 
   let presenter: DashboardLayoutBloc;

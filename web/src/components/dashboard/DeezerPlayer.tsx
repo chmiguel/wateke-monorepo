@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef } from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import styled from 'styled-components';
 import Button from '../generics/Button';
 import DeezerSDKLoader, { Counter } from './DeezerSDKLoader';
@@ -113,7 +113,11 @@ const DeezerPlayer: React.FC<PlayerProps> = props => {
   );
 };
 
-const PlayerContainer = styled.div`
+interface PlayerContainerProps {
+  hasPlayerLoaded: boolean;
+}
+
+const PlayerContainer = styled.div<PlayerContainerProps>`
   display: ${props => (props.hasPlayerLoaded ? 'flex' : 'none')};
   iframe:last-child {
     height: 100%;
@@ -124,7 +128,12 @@ const PlayerContainer = styled.div`
   }
 `;
 
-const FakePlayer = styled.div`
+interface FakePlayerProps {
+  width: number;
+  height: number;
+}
+
+const FakePlayer = styled.div<FakePlayerProps>`
   background-color: #00000060;
   width: ${props => props.width - 40}px;
   height: ${props => props.height - 40}px;
@@ -135,7 +144,12 @@ const FakePlayer = styled.div`
   padding: 20px;
 `;
 
-const PlayerLoader = styled.div`
+interface PlayerLoaderProps {
+  width: number;
+  height: number;
+}
+
+const PlayerLoader = styled.div<PlayerLoaderProps>`
   background-color: #00000060;
   width: ${props => props.width - 40}px;
   height: ${props => props.height - 40}px;

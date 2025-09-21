@@ -1,8 +1,8 @@
-import { Menu } from '@material-ui/core';
+import { Menu } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import QrCode from 'qrcode.react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+// import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { MdMoreVert } from 'react-icons/md';
 
 interface Props {
@@ -52,12 +52,16 @@ const SpotInfoMenu: React.FC<Props> = ({ spotLink, spotName }) => {
           </QrDescription>
           <LinkContainer>
             <Link>
-              <CopyToClipboard
-                text={spotLink}
-                onCopy={() => setIsLinkCopied(true)}
+              <span 
+                onClick={() => {
+                  navigator.clipboard.writeText(spotLink).then(() => {
+                    setIsLinkCopied(true);
+                  });
+                }}
+                style={{ cursor: 'pointer' }}
               >
-                <span>{spotLink}</span>
-              </CopyToClipboard>
+                {spotLink}
+              </span>
             </Link>
           </LinkContainer>
           <div className="color-primary" style={{ marginTop: 10 }}>

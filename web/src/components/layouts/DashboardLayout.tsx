@@ -1,9 +1,9 @@
 import React, { ReactElement, useEffect } from 'react';
-import Drawer from '@material-ui/core/Drawer';
-import { useHistory } from 'react-router-dom';
+import Drawer from '@mui/material/Drawer';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { MdArrowBack, MdGroup, MdSettings, MdExitToApp } from 'react-icons/md';
 import Header from '../generics/Header';
 import SpotUser from '../dashboard/SpotUser';
@@ -17,6 +17,7 @@ import DashboardLayoutBloc, {
 import withBloc from '../../core/withBlocHOC';
 import SpotInfoMenu from '../dashboard/SpotInfoMenu';
 import Settings from '../dashboard/Settings/Settings';
+import { Provider } from '../../Provider';
 
 const getTabsStyle = (isActive: boolean) => ({
   label: isActive ? 'color-primary' : 'color-white',
@@ -27,7 +28,7 @@ interface Props {
 }
 
 const DashboardLayout: React.FC<Props> = ({ children }): ReactElement => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [selectedSpotState, selectedSpotBloc] = useBloc(SelectedSpotBloc, {
     subscribe: false,
@@ -36,7 +37,7 @@ const DashboardLayout: React.FC<Props> = ({ children }): ReactElement => {
   const [state, bloc] = useBloc(DashboardLayoutBloc);
 
   useEffect(() => {
-    if (state.routeToRedirect) history.replace(state.routeToRedirect.path);
+    if (state.routeToRedirect) navigate(state.routeToRedirect.path, { replace: true });
   }, [state.routeToRedirect]);
 
   return (
@@ -236,5 +237,5 @@ const DescriptionContainer = styled.div`
 
 export default withBloc(
   DashboardLayout,
-  () => new DashboardLayoutBloc(selectedSpotBloc),
+  () => new DashboardLayoutBloc(selectedSpotBloc, Provider.navigationService()),
 );

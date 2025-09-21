@@ -14,6 +14,7 @@ interface Props {
   onSearchPressed?: () => void;
   onSearchTextChanged?: (searchText: string) => void;
   rightMenuElement?: ReactElement;
+  isDashboard?: boolean;
 }
 
 const Header: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const Header: React.FC<Props> = ({
   onSearchTextChanged,
   shouldShowAppIcon = false,
   title,
+  isDashboard = true,
   rightMenuElement,
 }) => {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
@@ -46,7 +48,7 @@ const Header: React.FC<Props> = ({
   }, []);
 
   return (
-    <HeaderContainer isDashboard>
+    <HeaderContainer $isDashboard={isDashboard}>
       <MenuIcon
         src="/assets/icons/icon-menu-white.svg"
         alt="menu-icon"
@@ -106,7 +108,7 @@ const Header: React.FC<Props> = ({
           <BlocBuilder
             blocClass={UserBloc}
             builder={([userState]) => (
-              <Avatar src={userState.avatar} className="opacity" />
+              <Avatar $src={userState.avatar} className="opacity" />
             )}
           />
         ) : null}
@@ -116,7 +118,11 @@ const Header: React.FC<Props> = ({
   );
 };
 
-const HeaderContainer = styled.div`
+interface HeaderContainerProps {
+  $isDashboard: boolean;
+}
+
+const HeaderContainer = styled.div<HeaderContainerProps>`
   width: 100%;
   height: 50px;
   background-color: #070707a0;
@@ -127,7 +133,7 @@ const HeaderContainer = styled.div`
   z-index: 2;
   @media (max-width: 420px) {
     background-color: ${props =>
-      props.isDashboard ? 'transparent' : '#070707a0'};
+      props.$isDashboard ? 'transparent' : '#070707a0'};
   }
 `;
 
@@ -138,11 +144,15 @@ const RightMenuContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const Avatar = styled.div`
+interface AvatarProps {
+  $src: string | null;
+}
+
+const Avatar = styled.div<AvatarProps>`
   width: 30px;
   height: 30px;
   border-radius: 30px;
-  background-image: ${props => `url(${props.src})`};
+  background-image: ${props => `url(${props.$src})`};
   background-size: cover;
   margin-right: 15px;
   @media (max-width: 420px) {
@@ -172,7 +182,11 @@ const Title = styled.p`
   text-overflow: ellipsis;
 `;
 
-const SearchContainer = styled.div`
+interface SearchContainerProps {
+  $xsHidden?: boolean;
+}
+
+const SearchContainer = styled.div<SearchContainerProps>`
   display: flex;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.15);
@@ -183,7 +197,7 @@ const SearchContainer = styled.div`
     background-color: rgba(255, 255, 255, 0.3);
   }
   @media (max-width: 680px) {
-    display: ${props => (props.xsHidden ? 'none' : 'flex')};
+    display: ${props => (props.$xsHidden ? 'none' : 'flex')};
     width: calc(100vw - 80px);
     margin-left: 20px;
   }

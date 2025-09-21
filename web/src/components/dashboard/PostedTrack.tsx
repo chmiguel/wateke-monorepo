@@ -1,23 +1,28 @@
 import React, { PureComponent } from 'react';
 import { FaHeart, FaRegHeart, FaHeartBroken } from 'react-icons/fa';
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import { MdMoreVert } from 'react-icons/md';
 import styled from 'styled-components';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from '@mui/material';
+import { styled as muiStyled } from '@mui/material/styles';
 import { accentColor } from '../../constants';
 import TrackTooltip from './TrackTooltip';
-import { withStyles } from '@material-ui/core';
 import randomMaterialColor from 'random-material-color';
 import { ReplyPayload } from '../../core/domain/chat/Chat';
 
-const HtmlTooltip = withStyles(() => ({
+const HtmlTooltip = muiStyled(Tooltip)(({ theme }) => ({
   tooltip: {
     backgroundColor: '#1B2631',
     padding: 0,
     opacity: 1.0,
   },
-  popper: { opacity: 1.0 },
-}))(Tooltip);
+  popper: { 
+    opacity: 1.0,
+    '&:hover': {
+      opacity: 1.0,
+    }
+  },
+}));
 
 interface Props {
   publishedSongId: string;
@@ -140,8 +145,8 @@ class PostedTrack extends PureComponent<Props, State> {
 
     return (
       <div>
-        <Container nextToPlay={false}>
-          <ThumbnailContainer src={songThumbnail} />
+        <Container $nextToPlay={false}>
+          <ThumbnailContainer $src={songThumbnail} />
           <HtmlTooltip
             title={
               <TrackTooltip
@@ -153,7 +158,6 @@ class PostedTrack extends PureComponent<Props, State> {
               />
             }
             placement="top"
-            interactive
           >
             <VideoDesc className="opacity">
               <TitleContainer className="title-cont">
@@ -258,19 +262,27 @@ class PostedTrack extends PureComponent<Props, State> {
   }
 }
 
-const Container = styled.div`
-  padding: ${props => (props.nextToPlay ? '0' : '10px 0px 10px 10px')};
+interface ContainerProps {
+  $nextToPlay: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
+  padding: ${props => (props.$nextToPlay ? '0' : '10px 0px 10px 10px')};
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${props => (props.nextToPlay ? '#0d1419' : 'transparent')};
+  background-color: ${props => (props.$nextToPlay ? '#0d1419' : 'transparent')};
 `;
 
-const ThumbnailContainer = styled.div`
+interface ThumbnailContainerProps {
+  $src: string;
+}
+
+const ThumbnailContainer = styled.div<ThumbnailContainerProps>`
   width: 80px;
   min-width: 80px;
   height: 60px;
-  background-image: ${props => `url(${props.src})`};
+  background-image: ${props => `url(${props.$src})`};
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

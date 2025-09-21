@@ -5,7 +5,12 @@ import { useBloc } from '../../core/state';
 import DeezerPlayerBloc from '../../presenters/DeezerPlayerBloc';
 import { getDeezerPlayerBounds } from './DeezerPlayer';
 
-const FakePlayer = styled.div`
+interface FakePlayerProps {
+  width: number;
+  height: number;
+}
+
+const FakePlayer = styled.div<FakePlayerProps>`
   background-color: #00000020;
   width: ${props => props.width - 40}px;
   height: ${props => props.height - 40}px;

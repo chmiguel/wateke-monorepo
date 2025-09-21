@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import CardOnBoarding from '../components/generics/CardOnBoarding';
 import Footer from '../components/generics/Footer';
 import Header from '../components/generics/HomeHeader';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 
 const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
   <img
@@ -25,14 +25,15 @@ const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
 );
 
 const LandingPage: React.FC = () => {
-  const history = useHistory<{ anchorId: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
   const scrollingTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    if (history.location.state && history.location.state.anchorId) {
+    if (location.state && (location.state as any)?.anchorId) {
       scrollingTimeout.current = setTimeout(() => {
         const element = document.getElementById(
-          history.location.state.anchorId,
+          (location.state as any).anchorId,
         );
         element?.scrollIntoView({ behavior: 'smooth' });
       }, 500);
@@ -84,20 +85,20 @@ const LandingPage: React.FC = () => {
               </p>
               <div className="divider margin-top-20 hidden-786" />
               <MainTitle
-                fontSize="18px"
-                colorText="#FFF"
-                marginTop="15px"
-                fontSizeResponisve="20px"
+                $fontSize="18px"
+                $colorText="#FFF"
+                $marginTop="15px"
+                $fontSizeResponisve="20px"
               >
                 Nuestro Amanecer
               </MainTitle>
               <Description
-                colorText="#979ca8"
-                textAlign="left"
-                fontSize="15px"
-                fontSizeResponisve="12px"
-                maxWidth="550px"
-                textAlignResponisve="center"
+                $colorText="#979ca8"
+                $textAlign="left"
+                $fontSize="15px"
+                $fontSizeResponisve="12px"
+                $maxWidth="550px"
+                $textAlignResponisve="center"
               >
                 Festival Cultural: Conciertos, conversatorios e ideas nuevas.
               </Description>
@@ -115,19 +116,20 @@ const LandingPage: React.FC = () => {
       </div>
       <div className="total-center section-landing">
         <BoxSlider id="items1">
+          {/* @ts-expect-error React Slick type compatibility issue with React 18 */}
           <Slider {...settings}>
             <div>
               <DarkPaper>
                 <div className="total-center">
                   <div className="width-default-content">
-                    <MainTitle fontSizeResponisve="30px">
+                    <MainTitle $fontSizeResponisve="30px">
                       ¿Cómo funciona Wateke?
                     </MainTitle>
                     <Description
-                      colorText="#979ca8"
-                      textAlign="left"
-                      fontSize="15px"
-                      fontSizeResponisve="12px"
+                      $colorText="#979ca8"
+                      $textAlign="left"
+                      $fontSize="15px"
+                      $fontSizeResponisve="12px"
                     >
                       Los Spots son espacios digitales que dispone un
                       administrador para sus usuarios.
@@ -149,13 +151,13 @@ const LandingPage: React.FC = () => {
               <DarkPaper>
                 <div className="total-center">
                   <div className="width-default-content">
-                    <MainTitle fontSizeResponisve="30px">
+                    <MainTitle $fontSizeResponisve="30px">
                       ¿Cómo funciona Wateke?
                     </MainTitle>
                     <Description
-                      colorText="#979ca8"
-                      textAlign="left"
-                      fontSize="15px"
+                      $colorText="#979ca8"
+                      $textAlign="left"
+                      $fontSize="15px"
                     >
                       Puedes crear tu propio Spot para eventos o uso personal.
                     </Description>
@@ -175,13 +177,13 @@ const LandingPage: React.FC = () => {
               <DarkPaper>
                 <div className="total-center">
                   <div className="width-default-content">
-                    <MainTitle fontSizeResponisve="30px">
+                    <MainTitle $fontSizeResponisve="30px">
                       ¿Cómo funciona Wateke?
                     </MainTitle>
                     <Description
-                      colorText="#979ca8"
-                      textAlign="left"
-                      fontSize="15px"
+                      $colorText="#979ca8"
+                      $textAlign="left"
+                      $fontSize="15px"
                     >
                       El orden de reproducción lo tienen los usuarios.
                     </Description>
@@ -209,16 +211,16 @@ const LandingPage: React.FC = () => {
         />
         <SectionDownload>
           <MainTitle
-            textAlign="center"
-            colorText="#FFF"
-            fontSizeResponisve="30px"
+            $textAlign="center"
+            $colorText="#FFF"
+            $fontSizeResponisve="30px"
           >
             Descarga la Aplicación.
           </MainTitle>
           <Description
-            maxWidth="700px"
-            fontSize="16px"
-            fontSizeResponisve="12px"
+            $maxWidth="700px"
+            $fontSize="16px"
+            $fontSizeResponisve="12px"
           >
             La aplicación está disponible para dispositivos móviles Android e
             iOS. Conéctate a los Spots de tus lugares recurrentes y comparte la
@@ -249,7 +251,7 @@ const LandingPage: React.FC = () => {
               />
             </a>
           </div>
-          <MainTitle textAlign="center" colorText="#FFF" fontSize="30px">
+          <MainTitle $textAlign="center" $colorText="#FFF" $fontSize="30px">
             Prueba la versión web
           </MainTitle>
           <NavLink to="/login">
@@ -264,20 +266,20 @@ const LandingPage: React.FC = () => {
       </div>
       <div className="section-final" id="items3">
         <div className=" width-default-content">
-          <MainTitle colorText="#9900fe" fontSizeResponisve="30px">
+          <MainTitle $colorText="#9900fe" $fontSizeResponisve="30px">
             ¿Donde puedes usar Wateke?
           </MainTitle>
-          <Description maxWidth="700px" fontSize="16px" textAlign="left">
+          <Description $maxWidth="700px" $fontSize="16px" $textAlign="left">
             <strong style={{ color: '#FFF' }}>Wateke</strong> fue creado para
             escuchar música en diversos escenarios. De esta manera, las personas
             interactúan a través del intercambio de canciones.
           </Description>
           <GridFinalLanding>
             <ItemsGrid className="items-section-4">
-              <MainTitle fontSize="48px" textAlign="center" colorText="#FFF">
+              <MainTitle $fontSize="48px" $textAlign="center" $colorText="#FFF">
                 Radio
               </MainTitle>
-              <Description fontSize="18px">
+              <Description $fontSize="18px">
                 Wateke ofrece a todos los radioyentes la oportunidad de escuchar
                 lo que desean. ¡Pruébalo en tu programa radial y haz que la
                 audiencia y sintonía crezcan!.
@@ -285,28 +287,28 @@ const LandingPage: React.FC = () => {
             </ItemsGrid>
             <ItemsGrid className="items-section-4">
               <MainTitle
-                fontSize="48px"
-                textAlign="center"
-                colorText="#FFF"
+                $fontSize="48px"
+                $textAlign="center"
+                $colorText="#FFF"
                 className="title-items-section-4"
               >
                 Gym
               </MainTitle>
-              <Description fontSize="18px">
+              <Description $fontSize="18px">
                 Cardio, pesas y wateke ¡La combinación perfecta! Hidrátate con
                 la mejor música mientras compartes tus hits preferidos.
               </Description>
             </ItemsGrid>
             <ItemsGrid className="items-section-4">
               <MainTitle
-                fontSize="48px"
-                textAlign="center"
-                colorText="#FFF"
+                $fontSize="48px"
+                $textAlign="center"
+                $colorText="#FFF"
                 className="title-items-section-4"
               >
                 Oficinas
               </MainTitle>
-              <Description fontSize="18px">
+              <Description $fontSize="18px">
                 Agrega y escucha tus pistas en el Spot de la oficina y sal de la
                 rutina diaria.
               </Description>
@@ -314,41 +316,41 @@ const LandingPage: React.FC = () => {
 
             <ItemsGrid className="items-section-4">
               <MainTitle
-                fontSize="48px"
-                textAlign="center"
-                colorText="#FFF"
+                $fontSize="48px"
+                $textAlign="center"
+                $colorText="#FFF"
                 className="title-items-section-4"
               >
                 Fiestas
               </MainTitle>
-              <Description fontSize="18px">
+              <Description $fontSize="18px">
                 ¡Ahora los invitados tienen el control! Wateke ofrece variedad e
                 interacción.
               </Description>
             </ItemsGrid>
             <ItemsGrid className="items-section-4">
               <MainTitle
-                fontSize="48px"
-                textAlign="center"
-                colorText="#FFF"
+                $fontSize="48px"
+                $textAlign="center"
+                $colorText="#FFF"
                 className="title-items-section-4"
               >
                 Restaurantes
               </MainTitle>
-              <Description fontSize="18px">
+              <Description $fontSize="18px">
                 Que tus clientes sientan que interactúan en tu espacio.
               </Description>
             </ItemsGrid>
             <ItemsGrid className="items-section-4">
               <MainTitle
-                fontSize="48px"
-                textAlign="center"
-                colorText="#FFF"
+                $fontSize="48px"
+                $textAlign="center"
+                $colorText="#FFF"
                 className="title-items-section-4"
               >
                 Conciertos
               </MainTitle>
-              <Description fontSize="18px">
+              <Description $fontSize="18px">
                 Los breaks también se hicieron para disfrutar de la música.
                 ¡Aprovéchalos! Consigue un spot y promociona canciones o
                 artistas nuevos.
@@ -356,10 +358,10 @@ const LandingPage: React.FC = () => {
             </ItemsGrid>
           </GridFinalLanding>
           <Description
-            maxWidth="1200px"
-            textAlign="right"
-            fontSize="29px"
-            fontWeight="600"
+            $maxWidth="1200px"
+            $textAlign="right"
+            $fontSize="29px"
+            $fontWeight="600"
             style={{ color: '#FFF', marginTop: 10 }}
           >
             Donde Quieras!
@@ -419,21 +421,31 @@ const DarkPaper = styled.div`
     min-height: 95vh;
   }
 `;
-const MainTitle = styled.p`
+interface MainTitleProps {
+  $maxWidth?: string;
+  $fontSize?: string;
+  $fontWeight?: string;
+  $textAlign?: string;
+  $colorText?: string;
+  $marginTop?: string;
+  $fontSizeResponisve?: string;
+}
+
+const MainTitle = styled.p<MainTitleProps>`
   width: 100%;
-  max-width: ${props => props.maxWidth};
+  max-width: ${props => props.$maxWidth};
   font-family: Poppins;
-  font-size: ${props => props.fontSize || '60px'};
-  font-weight: ${props => props.fontWeight || '600'};
+  font-size: ${props => props.$fontSize || '60px'};
+  font-weight: ${props => props.$fontWeight || '600'};
   font-style: normal;
   font-stretch: normal;
   line-height: 1.5;
   letter-spacing: normal;
-  text-align: ${props => props.textAlign || 'left'};
-  color: ${props => props.colorText || '#00fece'};
-  margin-top: ${props => props.marginTop};
+  text-align: ${props => props.$textAlign || 'left'};
+  color: ${props => props.$colorText || '#00fece'};
+  margin-top: ${props => props.$marginTop};
   @media (max-width: 768px) {
-    font-size: ${props => props.fontSizeResponisve};
+    font-size: ${props => props.$fontSizeResponisve};
     text-align: center;
   }
 `;
@@ -486,22 +498,33 @@ const SectionDownload = styled.div`
     margin-top: 50px;
   }
 `;
-const Description = styled.p`
+interface DescriptionProps {
+  $maxWidth?: string;
+  $fontSize?: string;
+  $fontWeight?: string;
+  $marginTop?: string;
+  $textAlign?: string;
+  $colorText?: string;
+  $fontSizeResponisve?: string;
+  $textAlignResponisve?: string;
+}
+
+const Description = styled.p<DescriptionProps>`
   width: 100%;
-  max-width: ${props => props.maxWidth};
+  max-width: ${props => props.$maxWidth};
   font-family: Poppins;
-  font-size: ${props => props.fontSize || '14px'};
-  font-weight: ${props => props.fontWeight || 'normal'};
-  margin-top: ${props => props.marginTop};
+  font-size: ${props => props.$fontSize || '14px'};
+  font-weight: ${props => props.$fontWeight || 'normal'};
+  margin-top: ${props => props.$marginTop};
   font-style: normal;
   font-stretch: normal;
   line-height: 1.5;
   letter-spacing: normal;
-  text-align: ${props => props.textAlign || 'center'};
-  color: ${props => props.colorText || '#979ca8'};
+  text-align: ${props => props.$textAlign || 'center'};
+  color: ${props => props.$colorText || '#979ca8'};
   @media (max-width: 768px) {
-    font-size: ${props => props.fontSizeResponisve};
-    text-align: ${props => props.textAlignResponisve};
+    font-size: ${props => props.$fontSizeResponisve};
+    text-align: ${props => props.$textAlignResponisve};
   }
 `;
 const LogoStore = styled.img`

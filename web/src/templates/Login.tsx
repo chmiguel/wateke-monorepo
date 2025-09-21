@@ -52,7 +52,7 @@ const Login: React.FC = (): ReactElement => {
           });
         } else {
           toast.error(e.message, {
-            position: toast.POSITION.BOTTOM_RIGHT,
+            position: 'bottom-right',
             className: 'rounded bold-text',
           });
         }
@@ -77,17 +77,17 @@ const Login: React.FC = (): ReactElement => {
               <LeftContainer>
                 <MobileHelper id="login-box" />
                 <Title
-                  align="center"
+                  $align="center"
                   style={{ marginTop: 20 }}
-                  marginBottom="30px"
-                  marginBottomXs="20px"
+                  $marginBottom="30px"
+                  $marginBottomXs="20px"
                 >
                   Bienvenido
                 </Title>
                 <Subtitle
-                  align="center"
-                  marginBottom="60px"
-                  marginBottomXs="30px"
+                  $align="center"
+                  $marginBottom="60px"
+                  $marginBottomXs="30px"
                 >
                   Wateke se trata de interactuar y decidir la música que se
                   escucha en tus lugares favoritos.
@@ -99,14 +99,14 @@ const Login: React.FC = (): ReactElement => {
               <HorizontalDivider />
               <RightContainer>
                 <Title
-                  responsiveColor="#505050"
-                  align="left"
-                  marginBottom="30px"
-                  marginBottomXs="10px"
+                  $responsiveColor="#505050"
+                  $align="left"
+                  $marginBottom="30px"
+                  $marginBottomXs="10px"
                 >
                   Iniciar sesión
                 </Title>
-                <Subtitle align="left" fontSize="12px" marginBottom="5px">
+                <Subtitle $align="left" $fontSize="12px" $marginBottom="5px">
                   Inicia sesión rápido con Google
                 </Subtitle>
                 <Button
@@ -238,31 +238,49 @@ const GoogleIcon = styled.img`
   width: 25px;
 `;
 
-const Title = styled.p`
+interface TitleProps {
+  $align?: string;
+  $marginBottom?: string;
+  $fontSize?: string;
+  $responsiveColor?: string;
+  $marginBottomXs?: string;
+  $fontSizeXs?: string;
+}
+
+const Title = styled.p<TitleProps>`
   font-weight: bold;
   color: #fff;
   font-size: 20px;
-  text-align: ${props => props.align};
-  margin-bottom: ${props => props.marginBottom};
-  font-size: ${props => props.fontSize};
+  text-align: ${props => props.$align};
+  margin-bottom: ${props => props.$marginBottom};
+  font-size: ${props => props.$fontSize};
   @media (max-width: 820px) {
-    color: ${props => props.responsiveColor};
-    margin-bottom: ${props => props.marginBottomXs};
-    font-size: ${props => props.fontSizeXs};
+    color: ${props => props.$responsiveColor};
+    margin-bottom: ${props => props.$marginBottomXs};
+    font-size: ${props => props.$fontSizeXs};
   }
 `;
 
-const Subtitle = styled.p`
+interface SubtitleProps {
+  $align?: string;
+  $marginBottom?: string;
+  $fontSize?: string;
+  $responsiveColor?: string;
+  $marginBottomXs?: string;
+  $fontSizeXs?: string;
+}
+
+const Subtitle = styled.p<SubtitleProps>`
   color: #a0a0a0;
   font-size: 14px;
-  text-align: ${props => props.align};
+  text-align: ${props => props.$align};
 
-  margin-bottom: ${props => props.marginBottom};
-  font-size: ${props => props.fontSize};
+  margin-bottom: ${props => props.$marginBottom};
+  font-size: ${props => props.$fontSize};
   @media (max-width: 820px) {
-    color: ${props => props.responsiveColor};
-    margin-bottom: ${props => props.marginBottomXs};
-    font-size: ${props => props.fontSizeXs};
+    color: ${props => props.$responsiveColor};
+    margin-bottom: ${props => props.$marginBottomXs};
+    font-size: ${props => props.$fontSizeXs};
   }
 `;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface Props {
   opacity?: number;
@@ -10,6 +10,7 @@ interface Props {
   thickness?: number;
   size?: number;
   message?: number;
+  children?: React.ReactNode;
 }
 
 const AbsoluteLoader: React.FC<Props> = props => {
