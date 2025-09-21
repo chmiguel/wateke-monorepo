@@ -116,12 +116,16 @@ export default class YoutubeSongsService implements SongsService {
   }
 
   searchSongs(searchText: string): Promise<Song[]> {
+    console.log('searchSongs', searchText);
     return fetch(
       `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&part=snippet&q=${encodeURI(
         searchText,
       )}&type=video&maxResults=20&videoEmbeddable=true&videoSyndicated=true`,
     )
       .then(res => {
+        if (res.status !== 200) {
+          throw new Error('Error searching songs');
+        }
         return res.json();
       })
       .then((foundVideos: FoundVideos) => {
@@ -130,7 +134,12 @@ export default class YoutubeSongsService implements SongsService {
           foundSongs = foundVideos.items.map(this.parseYoutubeVideoToSong);
         return foundSongs;
       })
-      .catch();
+      .catch((e) => {
+        return fetch(`${API_URL}/youtube/search?text=${searchText}`).then(response => response.json())
+          .then((result: ScrappedVideo[]) => {
+            return result?.map(this.parseScrappedVideoToSong);
+          })
+      });
   }
 
   private parseScrappedVideoToSong = (video: ScrappedVideo): Song => {

@@ -27,6 +27,7 @@ export default class UserRepository {
 
   getCurrentUser = async () => {
     this.user?.update(await this.localUserService.getCurrentUser());
+    this.user.isInitialized = true;
     return this.user;
   };
 

@@ -15,6 +15,8 @@ Date.prototype.addSeconds = function (s) {
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 var API_URL = process.env.REACT_APP_API_URL;
+var REACT_APP_URL = process.env.REACT_APP_URL;
+
 
 var generateRandomString = function (length) {
   var text = '';
@@ -107,7 +109,7 @@ app.get('/auth/login', (req, res) => {
 
   res.redirect(
     'https://accounts.spotify.com/authorize/?' +
-      auth_query_parameters.toString(),
+    auth_query_parameters.toString(),
   );
 });
 
@@ -129,7 +131,8 @@ app.get('/auth/refresh', (req, res) => {
   };
 
   request.post(authOptions, function (error, response, body) {
-    console.log(body);
+    console.log('refresh', body);
+    console.log('refresh error', error);
     if (!error && response.statusCode === 200) {
       res.send(body);
     }
@@ -138,7 +141,7 @@ app.get('/auth/refresh', (req, res) => {
 
 app.get('/spotify/search', async (req, res) => {
   console.log('Origin', req.get('Origin'), 'Referer', req.get('Referer'));
-  const allowedDomains = ['localhost:4000', 'watekemusic.com', 'wateke.live'];
+  const allowedDomains = ['localhost:3000', 'watekemusic.com', 'wateke.live'];
   const origin = req.get('origin');
   if (allowedDomains.includes(origin)) {
     res.set('Access-Control-Allow-Origin', origin);
@@ -171,8 +174,6 @@ app.get('/spotify/search', async (req, res) => {
 
 app.get('/auth/callback', (req, res) => {
   var code = req.query.code;
-
-  console.log(req.query);
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
@@ -193,13 +194,12 @@ app.get('/auth/callback', (req, res) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log(body);
       var params = new URLSearchParams({
         ...body,
         expires_at: new Date().addSeconds(3600).getTime(),
       });
       var access_token = body.access_token;
-      res.redirect(`https://watekemusic.com/dashboard?${params.toString()}`);
+      res.redirect(`${REACT_APP_URL}/dashboard?${params.toString()}`);
     }
   });
 });

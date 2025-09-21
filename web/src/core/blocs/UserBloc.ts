@@ -21,12 +21,13 @@ export default class UserBloc extends Cubit<UserState> {
   };
 
   login = (user: User) => {
+    user.isInitialized = true;
     this.userRepository.setCurrentUser(user);
     this.emit(user);
   };
 
   logout = () => {
-    const emptyUser = new User({});
+    const emptyUser = new User({isInitialized: true});
     this.userRepository.setCurrentUser(emptyUser);
     this.emit(emptyUser);
   };

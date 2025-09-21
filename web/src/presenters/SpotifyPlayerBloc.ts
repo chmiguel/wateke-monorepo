@@ -79,7 +79,7 @@ export default class SpotifyPlayerBloc extends Cubit<PlayerState> {
 
   handlePlayerStateChanged = async (state: any) => {
     if (!this.isSongInLastSeconds)
-      this.isSongInLastSeconds = state.duration - state.position <= 10000;
+      this.isSongInLastSeconds = state.duration - state.position <= 30000;
     const hasEndedPlaying =
       state.position === state.duration ||
       (this.isSongInLastSeconds && state.position === 0 && state.paused);

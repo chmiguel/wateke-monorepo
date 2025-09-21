@@ -4,6 +4,7 @@ export class User {
   name: string|null;
   uid: string|null;
   accessToken?: string|null;
+  isInitialized?: boolean;
 
   constructor(initialUser: any) {
     this.avatar = initialUser?.avatar || null;
@@ -11,6 +12,7 @@ export class User {
     this.name = initialUser?.name||null;
     this.uid = initialUser?.uid||null;
     this.accessToken =initialUser?.accessToken||null;
+    this.isInitialized = initialUser?.isInitialized || false;
   }
 
   update(initialUser: any) {
@@ -19,6 +21,7 @@ export class User {
     this.name = initialUser?.name||null;
     this.uid = initialUser?.uid||null;
     this.accessToken =initialUser?.accessToken||null;
+    this.isInitialized = initialUser?.isInitialized || false;
   }
 }
 

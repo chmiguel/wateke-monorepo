@@ -27,6 +27,11 @@ const Loading = (
 const Routes: React.FC = () => {
   const [userState] = useBloc(UserBloc);
   const [selectedSpotState] = useBloc(SelectedSpotBloc);
+
+  if (!userState.isInitialized) {
+    return null;
+  }
+  
   return (
     <Suspense fallback={Loading}>
       <Router history={history}>
